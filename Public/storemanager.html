@@ -68,6 +68,10 @@
     #logout {
         vertical-align: top;
     }
+/*
+    .add_inv_div{
+            margin:0px auto 0px auto;
+    }*/
     </style>
 </head>
 
@@ -75,7 +79,7 @@
     <header>
         <button id="logout" onclick="onLogOut()">Logout</button>
     </header>
-    <div>
+    <div align="center">
         <h1>Hi,Store Manager</h1>
         <p>Please find your options below,click on it to checkout</p>
         <!-- <button class="btn" id="addInventory">Add
@@ -84,7 +88,6 @@
         <button class="btn" id="addInventory" onclick="displayForm()">Add Inventory</button>
         <br><br><br>
         <div class="add_inv_div" id="add_inv_form" style="display:none;">
-            <!-- <form class="myForm" method="get" enctype="application/x-www-form-urlencoded" action="/html/codes/html_form_handler.cfm"> -->
             <form class="myForm" method="POST" action="/addInventory" enctype="application/x-www-form-urlencoded">
                 <p>
                     <label>Product Name
@@ -113,7 +116,6 @@
                 </p>
                 <p>
                     <label>Batch Date
-                        <!-- <input type="datetime-local" name="pickup_time" name="batch_date" required> -->
                         <input type="date" name="batch_date" name="pickup_time" required>
                     </label>
                 </p>
@@ -132,14 +134,14 @@
         <div style="line-height:70%;">
             <br>
         </div>
-
-
         <div>
             <button class="btn" id="FetchInventory" onclick="fetchInventory()">Fetch/Approve Inventory</button>
             <br><br><br>
-            <div id="fetchInvDiv">
-                <table id="PendingProducts"></table>
-            </div>
+        </div>
+        <div >
+            <p id="fetchInvDiv"></p>
+            <!-- align="center" -->
+            <table id="PendingProducts"></table>
         </div>
     </div>
 </body>

@@ -3,20 +3,12 @@ const app = express();
 const path = require("path");
 var connection = require("./connectToDB.js");
 const port = process.env.port || 9443;
-const sess_time = 1000 * 60 * 60 * 2; //2hours
 const router = express.Router();
 var bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
 app.use(cookieParser());
 
-//Set view engine to ejs
-// app.set("view engine", "pug");
-
-//Tell Express where we keep our index.ejs
-// app.set("views", __dirname + "/views");
-
-// app.use(express.static(__dirname ));
 app.use(express.static('Public'));
 
 app.use(express.static(__dirname + '/Public', {
@@ -27,6 +19,7 @@ app.use(express.static(__dirname + '/Public', {
 
 //Use body-parser
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use('/', router);
 
 router.get("/", function(req, res) {
@@ -40,6 +33,34 @@ router.get("/", function(req, res) {
     }
 });
 
+router.get("/login/:credentials", (req, res) => {
+    // res.writeHead(200, { "Content-Type": "text/html" });// res.render('storemanager.html')//, { title: 'Hey', message: 'Hello there DINESH!' }
+    uname = req.params.credentials.split(",")[0];
+    password = req.params.credentials.split(",")[1];
+    findUser(uname, password, function(useris) {
+        // res.send(useris);
+        res.send({ user: useris });
+    });
+});
+
+router.get("/staff_view/:user", function(req, res) {
+    if (req.cookies.pinkBlueUser === "Store Assistant") {
+        res.sendFile(path.join(__dirname, './Public', 'staff.html'));
+    } else {
+        throw new Error('wrong access to staff_view URL');
+    }
+});
+
+
+router.get("/storemanager_view/:user", function(req, res) {
+    if (req.cookies.pinkBlueUser === "Store Manager") {
+        res.sendFile(path.join(__dirname, './Public', 'storemanager.html')); //res.render('abc'); also works with pug
+    } else {
+        throw new Error('wrong access to storemanager_view URL');
+    }
+});
+
+
 router.post("/addInventory", function(req, res) {
     if (req.cookies.pinkBlueUser === "Store Manager" || req.cookies.pinkBlueUser === "Store Assistant") {
         console.log("req.body-", req.body);
@@ -47,7 +68,7 @@ router.post("/addInventory", function(req, res) {
         var item = req.body;
 
         var status = (req.cookies.pinkBlueUser === "Store Manager") ? "approved" : "pending";
-        insertProduct = `INSERT INTO InventoryRecord(ProductId,ProductName,Vendor,MRP,BatchNum,BatchDate,Quantity,Status) 
+        insertProduct = `REPLACE INTO InventoryRecord(ProductId,ProductName,Vendor,MRP,BatchNum,BatchDate,Quantity,Status) 
         VALUES ("` + item.product_id + `","` + item.product_name + `","` + item.vendor + `","` + item.mrp + `","` + item.batch_num + `",
         "` + item.batch_date + `","` + item.quantity + `","` + status + `");`
 
@@ -71,44 +92,21 @@ router.get("/fetchInventory", function(req, res) {
 });
 
 router.get("/sendForApproval/:productId", function(req, res) {
-    console.log("req.params.productId--",req.params.productId);
-    approve_update=`SET SQL_SAFE_UPDATES=0; UPDATE pinkblue.InventoryRecord SET Status='approved' WHERE ProductId=`+req.params.productId+`; SET SQL_SAFE_UPDATES=1;`
-    console.log("approve_update--",approve_update);
-    res.send("");
-    connection.query(approve_update, function(error, results, fields) {
-        if (error) throw new Error('failed to submit detail');
-        console.log("approved results",results);
-    });
+    try {
+        if (req.cookies.pinkBlueUser === "Store Manager") {
+            approve_update = `SET SQL_SAFE_UPDATES=0; UPDATE pinkblue.InventoryRecord SET Status='approved' WHERE ProductId=` + req.params.productId + `; SET SQL_SAFE_UPDATES=1;`
+            connection.query(approve_update, function(error, results, fields) {
+                if (error) throw new Error('failed to submit detail');
+                console.log("approved results", results);
+                res.send("updated");
+            });
+        }
+    } catch (err) {
 
-});
-
-
-router.get("/staff_view/:user", function(req, res) {
-    if (req.cookies.pinkBlueUser === "Store Assistant") {
-        res.sendFile(path.join(__dirname, './Public', 'staff.html'));
-    } else {
-        throw new Error('wrong access to staff_view URL');
     }
 });
 
-
-router.get("/storemanager_view/:user", function(req, res) {
-    if (req.cookies.pinkBlueUser === "Store Manager") {
-        res.sendFile(path.join(__dirname, './Public', 'storemanager.html')); //res.render('abc'); also works with pug
-    } else {
-        throw new Error('wrong access to storemanager_view URL');
-    }
-});
-
-router.get("/login/:credentials", (req, res) => {
-    // res.writeHead(200, { "Content-Type": "text/html" });// res.render('storemanager.html')//, { title: 'Hey', message: 'Hello there DINESH!' }
-    uname = req.params.credentials.split(",")[0];
-    password = req.params.credentials.split(",")[1];
-    findUser(uname, password, function(useris) {
-        res.send(useris);
-    });
-});
-
+//Helper functions
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -126,24 +124,6 @@ function getCookie(cname) {
     return "";
 }
 
-async function fetchInvFromDB(callback) {
-    try {
-        await connection.query(`select * from pinkblue.InventoryRecord where Status="pending";`, function(error, results, fields) {
-            if (error) throw error;
-            results = JSON.stringify(results);
-            results = JSON.parse(results);
-            console.log("RoWs--", results);
-            if (results.length != 0) {
-                callback(results);
-            } else {
-                callback("");
-            }
-        });
-    } catch (err) {
-        console.log(err);
-        callback({ error: "Failed retrieval" });
-    }
-}
 
 async function findUser(usern, pass, callback) {
     try {
@@ -190,6 +170,26 @@ async function isUserStoreManager(usern, callback) {
         return "Not exists"
     }
 }
+
+async function fetchInvFromDB(callback) {
+    try {
+        await connection.query(`select * from pinkblue.InventoryRecord where Status="pending";`, function(error, results, fields) {
+            if (error) throw error;
+            results = JSON.stringify(results);
+            results = JSON.parse(results);
+            console.log("RoWs--", results);
+            if (results.length != 0) {
+                callback(results);
+            } else {
+                callback("");
+            }
+        });
+    } catch (err) {
+        console.log(err);
+        callback({ error: "Failed retrieval" });
+    }
+}
+
 
 app.get(["/ping", "/sping"], function(req, res) {
     res.status(200).end('Ping OK');

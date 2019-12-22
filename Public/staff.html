@@ -33,7 +33,7 @@
 
         margin-top: 20px;
         margin-bottom: 20px;
-        margin-left: 700px;
+        margin-left: 550px;
         float: left;
 
         font-weight: 800;
@@ -74,55 +74,56 @@
     <header>
         <button id="logout" onclick="onLogOut()">Logout</button>
     </header>
-    <h1>Hi,Staff</h1>
+    <h1>Hi Staff,</h1>
     <p>Please find your options below,click on it to checkout</p>
-    <button class="btn" id="addInventory" onclick="displayForm()">Add Inventory</button>
-    <br><br><br>
-    <div class="add_inv_div" id="add_inv_form" style="display:none;">
-        <!-- <form class="myForm" method="get" enctype="application/x-www-form-urlencoded" action="/html/codes/html_form_handler.cfm"> -->
-        <form class="myForm" method="POST" action="/addInventory" enctype="application/x-www-form-urlencoded">
-            <p>
-                <label>Product Name
-                    <input type="text" name="product_name" required>
-                </label>
-            </p>
-            <p>
-                <label>Product Id
-                    <input type="text" name="product_id" required>
-                </label>
-            </p>
-            <p>
-                <label>Vendor
-                    <input type="text" name="vendor" required>
-                </label>
-            </p>
-            <p>
-                <label>MRP
-                    <input type="number" step="any" name="mrp" required>
-                </label>
-            </p>
-            <p>
-                <label>Batch Num
-                    <input type="text" name="batch_num" required>
-                </label>
-            </p>
-            <p>
-                <label>Batch Date
-                    <!-- <input type="datetime-local" name="pickup_time" name="batch_date" required> -->
-                    <input type="date" name="batch_date" name="pickup_time" required>
-                </label>
-            </p>
-            <p>
-                <label>Quantity
-                    <input type="number" name="quantity" required>
-                </label>
-            </p>
-            <p> <input id="submit_back" type="submit" value="submit product" onclick="submitProduct()"></p>
-            <div id="submitSuccess" style="display:none;">
-                <p>product submitted</p>
-            </div>
-        </form>
-        <div><button onclick="newForm()">New Form</button></div>
+    <div align="center">
+        <button class="btn" id="addInventory" onclick="displayForm()">Add Inventory</button>
+        <br><br><br>
+        <div class="add_inv_div" id="add_inv_form" style="display:none;">
+            <form class="myForm" method="POST" action="/addInventory" enctype="application/x-www-form-urlencoded">
+                <p>
+                    <label>Product Name
+                        <input type="text" name="product_name" required>
+                    </label>
+                </p>
+                <p>
+                    <label>Product Id
+                        <input type="text" name="product_id" required>
+                    </label>
+                </p>
+                <p>
+                    <label>Vendor
+                        <input type="text" name="vendor" required>
+                    </label>
+                </p>
+                <p>
+                    <label>MRP
+                        <input type="number" step="any" name="mrp" required>
+                    </label>
+                </p>
+                <p>
+                    <label>Batch Num
+                        <input type="text" name="batch_num" required>
+                    </label>
+                </p>
+                <p>
+                    <label>Batch Date
+                        <!-- <input type="datetime-local" name="pickup_time" name="batch_date" required> -->
+                        <input type="date" name="batch_date" name="pickup_time" required>
+                    </label>
+                </p>
+                <p>
+                    <label>Quantity
+                        <input type="number" name="quantity" required>
+                    </label>
+                </p>
+                <p> <input id="submit_back" type="submit" value="submit product" onclick="submitProduct()"></p>
+                <div id="submitSuccess" style="display:none;">
+                    <p>product submitted</p>
+                </div>
+            </form>
+            <div><button onclick="newForm()">New Form</button></div>
+        </div>
     </div>
 </body>
 
