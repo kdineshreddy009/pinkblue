@@ -40,6 +40,35 @@ router.get("/", function(req, res) {
     }
 });
 
+router.post("/addInventory", function(req, res) {
+    if (req.cookies.pinkBlueUser === "Store Manager" || req.cookies.pinkBlueUser === "Store Assistant") {
+        console.log("req.body-", req.body);
+        console.log("req.body.product_name-", req.body.product_name);
+        var item = req.body;
+
+        var status = (req.cookies.pinkBlueUser === "Store Manager") ? "approved" : "pending";
+        insertProduct = `INSERT INTO InventoryRecord(ProductId,ProductName,Vendor,MRP,BatchNum,BatchDate,Quantity,Status) 
+        VALUES ("` + item.product_id + `","` + item.product_name + `","` + item.vendor + `","` + item.mrp + `","` + item.batch_num + `",
+        "` + item.batch_date + `","` + item.quantity + `","` + status + `");`
+
+        try {
+            connection.query(insertProduct, function(error, results, fields) {
+                if (error) throw new Error('failed to submit detail');
+            });
+        } catch (err) {
+            next(err)
+        }
+        res.status(204).send();
+    } else {
+        res.sendFile(path.join(__dirname, './Public', 'login.html'));
+    }
+});
+
+router.get("/fetchInventory", function(req, res) {
+    fetchInvFromDB(function(rows) {
+        res.send(rows);
+    });
+});
 
 router.get("/staff_view/:user", function(req, res) {
     if (req.cookies.pinkBlueUser === "Store Assistant") {
@@ -59,7 +88,7 @@ router.get("/storemanager_view/:user", function(req, res) {
 });
 
 router.get("/login/:credentials", (req, res) => {
-// res.writeHead(200, { "Content-Type": "text/html" });// res.render('storemanager.html')//, { title: 'Hey', message: 'Hello there DINESH!' }
+    // res.writeHead(200, { "Content-Type": "text/html" });// res.render('storemanager.html')//, { title: 'Hey', message: 'Hello there DINESH!' }
     uname = req.params.credentials.split(",")[0];
     password = req.params.credentials.split(",")[1];
     findUser(uname, password, function(useris) {
@@ -84,6 +113,24 @@ function getCookie(cname) {
     return "";
 }
 
+async function fetchInvFromDB(callback){
+     try {
+        await connection.query(`select * from pinkblue.InventoryRecord where Status="pending";`, function(error, results, fields) {
+            if (error) throw error;
+            results=JSON.stringify(results);
+            results=JSON.parse(results);
+            console.log("RoWs--",results);
+            if (results.length != 0) {
+                callback(results);
+            } else {
+                callback("");
+            }
+        });
+    } catch (err) {
+        console.log(err);
+        callback({error:"Failed retrieval"});
+    }
+}
 
 async function findUser(usern, pass, callback) {
     try {
@@ -130,27 +177,6 @@ async function isUserStoreManager(usern, callback) {
         return "Not exists"
     }
 }
-
-
-
-// app.get('/addInventory/:catalogue', function(req, res) {
-//     var d = require('domain').create();
-//     try {
-//         d.on('error', function(err) {
-//             console.log("Domain ON error")
-//             throw err;
-//             return;
-//         });
-
-//         d.run(function() {
-//             console.log("_______START_______");
-
-//         });
-//     } catch (err) {
-//         console.log("Caught in /scannable catch" + err.message);
-//         console.log("_______ERROR_______");
-//     }
-// });
 
 app.get(["/ping", "/sping"], function(req, res) {
     res.status(200).end('Ping OK');

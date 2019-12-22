@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -13,12 +13,11 @@
     <!-- <link type="text/css" rel="stylesheet" href="index.css" /> -->
     <link type='text/css' rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:700,600">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/index.js" type="text/javascript" ></script>
-
+    <script src="/index.js" type="text/javascript"></script>
     <!-- <link type="text/css" rel="stylesheet" href="index.css" /> -->
     <!-- move below CSS to above sheet -->
     <style>
-    body {
+        body {
         font-family: 'Open Sans', sans-serif;
         background: #3498db;
         margin: 0 auto 0 auto;
@@ -76,16 +75,72 @@
     <header>
         <button id="logout" onclick="onLogOut()">Logout</button>
     </header>
-    
     <div>
         <h1>Hi,Store Manager</h1>
         <p>Please find your options below,click on it to checkout</p>
-        <button class="btn" id="addInventory">Add
+        <!-- <button class="btn" id="addInventory">Add
             Inventory</button>
-        <div style="line-height:500%;">
+         -->
+        <button class="btn" id="addInventory" onclick="displayForm()">Add Inventory</button>
+        <br><br><br>
+        <div class="add_inv_div" id="add_inv_form" style="display:none;">
+            <!-- <form class="myForm" method="get" enctype="application/x-www-form-urlencoded" action="/html/codes/html_form_handler.cfm"> -->
+            <form class="myForm" method="POST" action="/addInventory" enctype="application/x-www-form-urlencoded">
+                <p>
+                    <label>Product Name
+                        <input type="text" name="product_name" required>
+                    </label>
+                </p>
+                <p>
+                    <label>Product Id
+                        <input type="text" name="product_id" required>
+                    </label>
+                </p>
+                <p>
+                    <label>Vendor
+                        <input type="text" name="vendor" required>
+                    </label>
+                </p>
+                <p>
+                    <label>MRP
+                        <input type="number" step="any" name="mrp" required>
+                    </label>
+                </p>
+                <p>
+                    <label>Batch Num
+                        <input type="text" name="batch_num" required>
+                    </label>
+                </p>
+                <p>
+                    <label>Batch Date
+                        <!-- <input type="datetime-local" name="pickup_time" name="batch_date" required> -->
+                        <input type="date" name="batch_date" name="pickup_time" required>
+                    </label>
+                </p>
+                <p>
+                    <label>Quantity
+                        <input type="number" name="quantity" required>
+                    </label>
+                </p>
+                <p> <input id="submit_back" type="submit" value="submit product" onclick="submitProduct()"></p>
+                <div id="submitSuccess" style="display:none;">
+                    <p>product submitted</p>
+                </div>
+            </form>
+            <div><button onclick="newForm()">New Form</button></div>
+        </div>
+        <div style="line-height:70%;">
             <br>
         </div>
-        <button class="btn" id="FetchInventory">Fetch/Approve Inventory</button>
+
+
+        <div>
+            <button class="btn" id="FetchInventory" onclick="fetchInventory()">Fetch/Approve Inventory</button>
+            <br><br><br>
+            <div id="fetchInvDiv">
+                <table id="PendingProducts"></table>
+            </div>
+        </div>
     </div>
 </body>
 

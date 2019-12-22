@@ -7,7 +7,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>My Example</title>
     <!-- CSS -->
-    <style>
+    <!--   <style>
         .myForm {
 font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 font-size: 0.8em;
@@ -67,50 +67,49 @@ margin-top: 1em;
 background: #ccc;
 cursor: pointer;
 }
-</style>
+</style> -->
 </head>
-
-
-Batch Num, Batch Date, Quantity (Stock on Hand)
 <body>
-    <form class="myForm" method="get" enctype="application/x-www-form-urlencoded" action="/html/codes/html_form_handler.cfm">
-        <p>
-            <label>Product Name
-                <input type="text" name="product_name" required>
-            </label>
-        </p>
-        <p>
-            <label>Product Id
-                <input type="text" name="phone_number" required>
-            </label>
-        </p>
-        <p>
-            <label>Vendor
-                <input type="text" name="vendor" required>
-            </label>
-        </p>
-        <p>
-            <label>MRP
-                <input type="number" step="any" name="mrp" required>
-            </label>
-        </p>
-        <p>
-            <label>Batch Num
-                <input type="text" name="batch_num" required>
-            </label>
-        </p>
-        <p>
-            <label>Batch Date
-                <input type="datetime-local" name="pickup_time" name="batch_date" required>
-            </label>
-        </p>
-        <p>
-            <label>Quantity
-                <input type="number" name="quantity" required>
-            </label>
-        </p>
-        <p><button>Submit Booking</button></p>
-    </form>
+    <div>
+        <form class="myForm" id="add_inv_form" method="get" enctype="application/x-www-form-urlencoded" action="/html/codes/html_form_handler.cfm">
+            <p>
+                <label>Product Name
+                    <input type="text" name="product_name" required>
+                </label>
+            </p>
+            <p>
+                <label>Product Id
+                    <input type="text" name="phone_number" required>
+                </label>
+            </p>
+            <p>
+                <label>Vendor
+                    <input type="text" name="vendor" required>
+                </label>
+            </p>
+            <p>
+                <label>MRP
+                    <input type="number" step="any" name="mrp" required>
+                </label>
+            </p>
+            <p>
+                <label>Batch Num
+                    <input type="text" name="batch_num" required>
+                </label>
+            </p>
+            <p>
+                <label>Batch Date
+                    <input type="datetime-local" name="pickup_time" name="batch_date" required>
+                </label>
+            </p>
+            <p>
+                <label>Quantity
+                    <input type="number" name="quantity" required>
+                </label>
+            </p>
+            <p><button>Submit Booking</button></p>
+        </form>
+    </div>
 </body>
 
 </html>
