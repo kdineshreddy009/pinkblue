@@ -1,4 +1,7 @@
-# pinkblue
+FullStack Assignment:
+
+Design and implement the frontend and backend for a basic inventory management
+application.
 
 Context:
 1. There are 2 roles: Store Assistant, Store Manager
