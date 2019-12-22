@@ -6,7 +6,7 @@ function setCookie(cname, cvalue, exdays) {
 }
 
 function newRequest() {
-    document.getElementById("signin").disabled = true; 
+    // document.getElementById("signin").disabled = true;
     let uname = document.getElementById("username").value;
     let password = document.getElementById("password").value;
 
@@ -25,7 +25,8 @@ function newRequest() {
             } else if (data.toString() === "Store Assistant") {
                 window.location = "/staff_view/" + uname;
             } else {
-                console.log("bad user");
+                let logDiv = document.getElementById("login_div");
+                logDiv.innerHTML = "wrong user credentials";    
             }
         },
         timeout: 75000,
@@ -46,7 +47,7 @@ function generateTableHead(table, data) {
         row.appendChild(th);
     }
     let th = document.createElement("th");
-    let text = document.createTextNode("Provide Approval");
+    let text = document.createTextNode("Approval Status");
     th.appendChild(text);
     row.appendChild(th);
 }
@@ -60,9 +61,9 @@ function generateTable(table, data) {
             cell.appendChild(text);
         }
         let cell = row.insertCell();
-        cell.id = "cell-"+element.ProductId;
+        cell.id = "cell-" + element.ProductId;
         let buton = document.createElement("BUTTON");
-        buton.id = "button-"+element.ProductId;
+        buton.id = "button-" + element.ProductId;
         buton.onclick = sendForApproval;
         let disp = document.createTextNode("Approve it");
         buton.appendChild(disp);
@@ -70,19 +71,18 @@ function generateTable(table, data) {
     }
 }
 
-function sendForApproval(){
+function sendForApproval() {
     console.log("sendForApproval");
     let productId = this.id && this.id.split("-")[1];
-        $.ajax({
+    $.ajax({
         type: 'get',
-        url: "/fetchInventory",
+        url: "/sendForApproval/" + productId,
         contentType: 'application/x-www-form-urlencoded',
         success: function(data) {
-            console.log("SQL output", data);
-
- 
-
-
+            $("#button-" + productId).hide();
+            var msg = document.createTextNode("Sent For Approval");
+            $("#cell-" + productId).append(msg);
+            $("#cell-" + productId).show();
         },
         timeout: 75000,
         error: function(data) {
@@ -100,15 +100,18 @@ function fetchInventory() {
         contentType: 'application/x-www-form-urlencoded',
         success: function(data) {
             console.log("SQL output", data);
-            // if(data===""){
-            //     fetchInvDiv not products are pending
-            // }else if(data.error){
-            //     fetchInvDiv failed to retrieve are pending
-            // }
-            let table = document.getElementById("PendingProducts");
-            let sampleRow = Object.keys(data[0]);
-            generateTableHead(table, sampleRow);
-            generateTable(table, data);
+            let msg = document.getElementById("PendingProducts");
+            if (data.error) {
+                msg.innerHTML = "Failed to retrieve rows";
+            } else if (data.length === 0) {
+                console.log("No Pending Requests");
+                msg.innerHTML = "No Pending Requests!";
+            } else {
+                let table = document.getElementById("PendingProducts");
+                let sampleRow = Object.keys(data[0]);
+                generateTableHead(table, sampleRow);
+                generateTable(table, data);
+            }
         },
         timeout: 75000,
         error: function(data) {

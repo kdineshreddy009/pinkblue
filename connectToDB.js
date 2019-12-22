@@ -6,7 +6,8 @@ var connection = mysql.createConnection({
   password : 'www123!@#',
   database : 'pinkblue',
   queueLimit : 0, // unlimited queueing
-  connectionLimit : 0 // unlimited connections
+  connectionLimit : 0, // unlimited connections
+  multipleStatements: true
 });
 connection.connect();
 // console.log("connectionis --",connection);

@@ -70,6 +70,19 @@ router.get("/fetchInventory", function(req, res) {
     });
 });
 
+router.get("/sendForApproval/:productId", function(req, res) {
+    console.log("req.params.productId--",req.params.productId);
+    approve_update=`SET SQL_SAFE_UPDATES=0; UPDATE pinkblue.InventoryRecord SET Status='approved' WHERE ProductId=`+req.params.productId+`; SET SQL_SAFE_UPDATES=1;`
+    console.log("approve_update--",approve_update);
+    res.send("");
+    connection.query(approve_update, function(error, results, fields) {
+        if (error) throw new Error('failed to submit detail');
+        console.log("approved results",results);
+    });
+
+});
+
+
 router.get("/staff_view/:user", function(req, res) {
     if (req.cookies.pinkBlueUser === "Store Assistant") {
         res.sendFile(path.join(__dirname, './Public', 'staff.html'));
@@ -113,13 +126,13 @@ function getCookie(cname) {
     return "";
 }
 
-async function fetchInvFromDB(callback){
-     try {
+async function fetchInvFromDB(callback) {
+    try {
         await connection.query(`select * from pinkblue.InventoryRecord where Status="pending";`, function(error, results, fields) {
             if (error) throw error;
-            results=JSON.stringify(results);
-            results=JSON.parse(results);
-            console.log("RoWs--",results);
+            results = JSON.stringify(results);
+            results = JSON.parse(results);
+            console.log("RoWs--", results);
             if (results.length != 0) {
                 callback(results);
             } else {
@@ -128,7 +141,7 @@ async function fetchInvFromDB(callback){
         });
     } catch (err) {
         console.log(err);
-        callback({error:"Failed retrieval"});
+        callback({ error: "Failed retrieval" });
     }
 }
 
