@@ -15,4 +15,5 @@ adding/changing/removing inventory record
 
 
 Folders: Public
-files: server.js & connectToDB.js
+
+Files: server.js & connectToDB.js
