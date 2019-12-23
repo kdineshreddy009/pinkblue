@@ -61,5 +61,7 @@ How To Install & Test:
       
       
 ->To make server Up,run command : nodemon server.js 
+
 ->Now login with the username & password you inserted into DB http://localhost:9443/
+
 ->If you login with staff, you will be able to only add inventory & status will be pending. If logged as owner you can with out approval and owner can fetch & approve it
