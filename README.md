@@ -1,4 +1,5 @@
 FullStack Assignment:
+
 Design and implement the frontend and backend for a basic inventory management
 application.
 
@@ -19,8 +20,10 @@ adding/changing/removing inventory record
 How To Install & Test:
 
 ->Pull this package & run command "npm install" inside the directory where package.json lies to get required node modules
-->Install MySQL server(make sure its running) & MySQL workbench to insert rows for testing
+
+->Install MySQL server(make sure its running) & insert rows for testing
       #change DB credentials accordingly here https://github.com/kdineshreddy009/pinkblue/blob/master/connectToDB.js
+
 ->Create 3 tables under DB name:pinkblue. For simplicity, i inserted all of them as VARCHAR.
    1.Table name-InventoryRecord. 
      coloumns: ProductId(PK),ProductName,Vendor,MRP,BatchNum, BatchDate,Quantity,Status
