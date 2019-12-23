@@ -44,7 +44,8 @@ adding/changing/removing inventory record
            INSERT INTO users(username, password,mail) VALUES ('staff', '1234',"staff@pinkblue.com");
            INSERT INTO users(username, password,mail) VALUES ('owner', '123',"owner@pinkblue.com");
 
-## NOTE:Best Practise:DB password requires encryption on server side & then inserting into DB
+            NOTE:
+            Best Practise-DB passwords requires encryption on server side & then inserting into DB. Which is not implemented yet
 
    - Table name:roles
          
