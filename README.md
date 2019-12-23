@@ -22,7 +22,8 @@ adding/changing/removing inventory record
      - Table name:InventoryRecord 
 
            coloumns: ProductId(PK),ProductName,Vendor,MRP,BatchNum, BatchDate,Quantity,Status
-     
+           
+           Example record:
            ProductId, ProductName, Vendor,      MRP,  BatchNum,   BatchDate,   Quantity, Status
                  '1', 'vix',      'Dr.Reddys', '1.5', '1994',     '21/08/94',   '1',     'approved'
                  '2', 'Halls',    'Plabs',     '1111', '1122121', '2019-12-02', '12',    'pending'   
@@ -69,4 +70,4 @@ adding/changing/removing inventory record
             
             http://localhost:9443/
 
-- If you login with staff, you will be able to only add inventory & status will be pending. If logged as owner you can with out approval and owner can fetch & approve it
+- If you login with staff, you will be able to only add inventory & status will be pending. If logged as owner, you can add without approval and owner can fetch pending inventory & approve it
